@@ -5,15 +5,14 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
-import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import javafx.event.ActionEvent;
@@ -28,6 +27,12 @@ public class Controller {
 	
 	@FXML
 	private ImageView imageView; // the image display window in the GUI
+
+	@FXML
+	private Slider frameSlider;
+
+	@FXML
+	private Label fpsLabel;
 	
 	private DynamicMatArray video;
 	private Task task = new Task() {
@@ -47,7 +52,8 @@ public class Controller {
 	private int numberOfSamplesPerColumn;
 
 	private String currentMediaPath;
-	
+	private int startFrame = 0;
+
 	@FXML
 	private void initialize() {
 		// Optional: You should modify the logic so that the user can change these values
@@ -57,6 +63,8 @@ public class Controller {
 		sampleRate = 8000;
 		sampleSizeInBits = 8;
 		numberOfChannels = 1;
+
+		startFrame = 0;
 		
 		numberOfQuantizionLevels = 16;
 		
@@ -64,6 +72,14 @@ public class Controller {
 
 		this.currentMediaPath = "";
 		this.video = new DynamicMatArray();
+
+		updateSlider();
+		frameSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            startFrame = (int) Math.round((Double) newValue);
+            displayImage(video.get(startFrame));
+        });
+
+		hideFPSLabel();
 		
 		// assign frequencies for each particular row
 		freq = new double[height]; // Be sure you understand why it is height rather than width
@@ -92,6 +108,8 @@ public class Controller {
 		return this.currentMediaPath;
 	}
 
+	private void changeSliderValue(int frame){frameSlider.setValue(frame);}
+
 	private void configureFileChooser(final FileChooser fileChooser){
 		fileChooser.setTitle("Choose Image");
 		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
@@ -111,12 +129,29 @@ public class Controller {
 		if (!mediaFilename.isEmpty()){
 			video = new DynamicMatArray(); // Resets the dynamic array
 			readInMedia(this.currentMediaPath);
+			if (video.getLength() <= 1){hideFPSLabel();} else {showFPSLabel();}
 			displayImage(this.video.get(0));
+			updateSlider();
 		}
 		// You don't have to understand how mat2Image() works.
 		// In short, it converts the image from the Mat format to the Image format
 		// The Mat format is used by the opencv library, and the Image format is used by JavaFX
 		// BTW, you should be able to explain briefly what opencv and JavaFX are after finishing this assignment
+	}
+
+	private void updateSlider(){
+		if (video.getLength() <= 1){
+			frameSlider.setDisable(true);
+		}
+		else {
+			frameSlider.setDisable(false);
+			frameSlider.setMin(0);
+			frameSlider.setMax(video.getLength());
+			frameSlider.setSnapToTicks(true);
+			frameSlider.setBlockIncrement(1);
+			frameSlider.setShowTickMarks(true);
+			frameSlider.setShowTickLabels(true);
+		}
 	}
 
 	private void readInMedia(String mediaFilepath){
@@ -143,13 +178,14 @@ public class Controller {
 
 			@Override
 			protected Void call() throws LineUnavailableException {
-				for (int i = 0; i < numberFrames; i++){
+				for (int i = startFrame; i < numberFrames; i++){
+					changeSliderValue(i);
 					if (isCancelled()){break;}
 					playImage(video.get(i));
 					displayImage(video.get(i + 1));
 					if (i % 2 == 1){playClick();}
 				}
-				displayImage(video.get(0));
+				displayImage(video.get(startFrame));
 				return null;
 			}
 		};
@@ -164,13 +200,15 @@ public class Controller {
 		task = new Task<Void>() {
 
 			@Override
-			protected Void call() throws LineUnavailableException {
-				for (int i = 0; i < numberFrames; i++){
+			protected Void call() throws LineUnavailableException, InterruptedException {
+				for (int i = startFrame; i < numberFrames; i++){
+					changeSliderValue(i);
 					if (isCancelled()){break;}
 					displayImage(video.get(i + 1));
 					if (i % 2 == 1){playClick();}
+					Thread.sleep(33);
 				}
-				displayImage(video.get(0));
+				displayImage(video.get(startFrame));
 				return null;
 			}
 		};
@@ -232,4 +270,8 @@ public class Controller {
 	private void playClick(){
 		// TODO Implement This Using the Click.mp3 file in src/application
 	}
+
+	private void hideFPSLabel(){fpsLabel.setText("");}
+
+	private void showFPSLabel(){fpsLabel.setText("All Videos Assumed To Be 30 FPS");}
 }
