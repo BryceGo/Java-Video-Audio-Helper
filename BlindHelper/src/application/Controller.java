@@ -34,6 +34,8 @@ public class Controller {
 	private double[] freq; // frequencies for each particular row
 	private int numberOfQuantizionLevels;
 	private int numberOfSamplesPerColumn;
+
+	private String currentMediaPath;
 	
 	@FXML
 	private void initialize() {
@@ -48,6 +50,8 @@ public class Controller {
 		numberOfQuantizionLevels = 16;
 		
 		numberOfSamplesPerColumn = 500;
+
+		this.currentMediaPath = "";
 		
 		// assign frequencies for each particular row
 		freq = new double[height]; // Be sure you understand why it is height rather than width
@@ -70,7 +74,10 @@ public class Controller {
 		configureFileChooser(fileChooser);
 		File file = fileChooser.showOpenDialog(stage);
 
-		return file.getPath();
+		if (file != null) {
+			this.currentMediaPath = file.getPath();
+		}
+		return this.currentMediaPath;
 	}
 
 	private void configureFileChooser(final FileChooser fileChooser){
@@ -87,6 +94,7 @@ public class Controller {
 		// This method opens an image and display it using the GUI
 		// You should modify the logic so that it opens and displays a video
 		final String imageFilename = getImageFilename();
+		if (imageFilename.isEmpty()){return;}
 		image = Imgcodecs.imread(imageFilename);
 		imageView.setImage(Utilities.mat2Image(image)); 
 		// You don't have to understand how mat2Image() works. 
