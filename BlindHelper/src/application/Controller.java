@@ -5,6 +5,8 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -14,6 +16,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import utilities.Utilities;
+
+import java.io.File;
 
 public class Controller {
 	
@@ -59,7 +63,23 @@ public class Controller {
 	private String getImageFilename() {
 		// This method should return the filename of the image to be played
 		// You should insert your code here to allow user to select the file
-		return "resources/test.png";
+		Stage stage = new Stage();
+		stage.setTitle("File Chooser");
+
+		final FileChooser fileChooser = new FileChooser();
+		configureFileChooser(fileChooser);
+		File file = fileChooser.showOpenDialog(stage);
+
+		return file.getPath();
+	}
+
+	private void configureFileChooser(final FileChooser fileChooser){
+		fileChooser.setTitle("Choose Image");
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+		fileChooser.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+				new FileChooser.ExtensionFilter("PNG", "*.png"));
 	}
 	
 	@FXML
