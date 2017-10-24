@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.image.ImageView?>
@@ -14,20 +8,30 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
    <bottom>
       <VBox prefHeight="111.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
             <HBox prefHeight="68.0" prefWidth="600.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#openImage" prefHeight="40.0" prefWidth="100.0" text="Open">
+                  <Button minWidth="100.0" mnemonicParsing="false" onAction="#openMedia" prefHeight="40.0" prefWidth="124.0" text="Open File" translateX="-100.0">
                      <HBox.margin>
                         <Insets left="150.0" top="20.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#playImage" prefHeight="40.0" prefWidth="100.0" text="Play">
+                  <Button minHeight="40.0" minWidth="118.0" mnemonicParsing="false" onAction="#playVideoWithSound" prefHeight="40.0" prefWidth="118.0" text="Play With Sound" translateX="-120.0">
                      <HBox.margin>
                         <Insets left="100.0" top="20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button minHeight="40.0" minWidth="130.0" mnemonicParsing="false" onAction="#playVideoWithoutSound" prefHeight="40.0" prefWidth="130.0" text="Play Without Sound" translateX="-110.0">
+                     <HBox.margin>
+                        <Insets top="20.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button minWidth="75.0" mnemonicParsing="false" onAction="#stopVideo" prefHeight="40.0" prefWidth="118.0" text="Stop" translateX="-100.0">
+                     <HBox.margin>
+                        <Insets top="20.0" />
                      </HBox.margin>
                   </Button>
                </children>
