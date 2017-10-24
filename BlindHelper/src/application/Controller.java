@@ -6,9 +6,12 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
 import javafx.concurrent.Task;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.opencv.core.Mat;
@@ -23,6 +26,9 @@ import utilities.Utilities;
 
 import java.io.File;
 
+import static org.opencv.imgcodecs.Imgcodecs.CV_LOAD_IMAGE_COLOR;
+import static org.opencv.imgcodecs.Imgcodecs.imread;
+
 public class Controller {
 	
 	@FXML
@@ -33,7 +39,12 @@ public class Controller {
 
 	@FXML
 	private Label fpsLabel;
-	
+
+	@FXML
+	private Button playWithoutSoundButton, playWithSoundButton, stopButton;
+
+	private static final String CLICK_PATH = "BlindHelper/src/application/Click.mp3";
+
 	private DynamicMatArray video;
 	private Task task = new Task() {
 		@Override
@@ -41,6 +52,7 @@ public class Controller {
 			return null;
 		}
 	};
+	private MediaPlayer clickPlayer = new MediaPlayer(new Media(new File(CLICK_PATH).toURI().toString()));
 	
 	private int width;
 	private int height;
@@ -64,22 +76,9 @@ public class Controller {
 		sampleSizeInBits = 8;
 		numberOfChannels = 1;
 
-		startFrame = 0;
-		
 		numberOfQuantizionLevels = 16;
 		
 		numberOfSamplesPerColumn = 500;
-
-		this.currentMediaPath = "";
-		this.video = new DynamicMatArray();
-
-		updateSlider();
-		frameSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            startFrame = (int) Math.round((Double) newValue);
-            displayImage(video.get(startFrame));
-        });
-
-		hideFPSLabel();
 		
 		// assign frequencies for each particular row
 		freq = new double[height]; // Be sure you understand why it is height rather than width
@@ -90,37 +89,18 @@ public class Controller {
 		for (int m = height/2-2; m >=0; m--) {
 			freq[m] = freq[m+1] * Math.pow(2, -1.0/12.0); 
 		}
-	}
-	
-	private String getMediaFilename() {
-		// This method should return the filename of the image to be played
-		// You should insert your code here to allow user to select the file
-		Stage stage = new Stage();
-		stage.setTitle("File Chooser");
 
-		final FileChooser fileChooser = new FileChooser();
-		configureFileChooser(fileChooser);
-		File file = fileChooser.showOpenDialog(stage);
-
-		if (file != null) {
-			this.currentMediaPath = file.getPath();
-		}
-		return this.currentMediaPath;
+		startFrame = 0;
+		this.currentMediaPath = "";
+		this.video = new DynamicMatArray();
+		frameSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+			startFrame = (int) Math.round((Double) newValue);
+			displayImage(video.get(startFrame));
+		});
+		updateSlider();
+		hideFPSLabel();
 	}
 
-	private void changeSliderValue(int frame){frameSlider.setValue(frame);}
-
-	private void configureFileChooser(final FileChooser fileChooser){
-		fileChooser.setTitle("Choose Image");
-		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-
-		fileChooser.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("Media File", "*.*"),
-				new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-				new FileChooser.ExtensionFilter("PNG", "*.png"),
-				new FileChooser.ExtensionFilter("MP4", "*.mp4"));
-	}
-	
 	@FXML
 	protected void openMedia(ActionEvent event) throws InterruptedException {
 		// This method opens an image and display it using the GUI
@@ -129,41 +109,27 @@ public class Controller {
 		if (!mediaFilename.isEmpty()){
 			video = new DynamicMatArray(); // Resets the dynamic array
 			readInMedia(this.currentMediaPath);
-			if (video.getLength() <= 1){hideFPSLabel();} else {showFPSLabel();}
-			displayImage(this.video.get(0));
-			updateSlider();
+			if (video.getLength() > 0){
+				if (video.getLength() == 1) {
+					hideFPSLabel();
+					playWithoutSoundButton.setDisable(true);
+					playWithSoundButton.setDisable(true);
+					stopButton.setDisable(true);
+				} else {
+					showFPSLabel();
+					playWithoutSoundButton.setDisable(false);
+					playWithSoundButton.setDisable(false);
+					stopButton.setDisable(false);
+				}
+				displayImage(this.video.get(0));
+				updateSlider();
+				startFrame = 0;
+			}
 		}
 		// You don't have to understand how mat2Image() works.
 		// In short, it converts the image from the Mat format to the Image format
 		// The Mat format is used by the opencv library, and the Image format is used by JavaFX
 		// BTW, you should be able to explain briefly what opencv and JavaFX are after finishing this assignment
-	}
-
-	private void updateSlider(){
-		if (video.getLength() <= 1){
-			frameSlider.setDisable(true);
-		}
-		else {
-			frameSlider.setDisable(false);
-			frameSlider.setMin(0);
-			frameSlider.setMax(video.getLength());
-			frameSlider.setSnapToTicks(true);
-			frameSlider.setBlockIncrement(1);
-			frameSlider.setShowTickMarks(true);
-			frameSlider.setShowTickLabels(true);
-		}
-	}
-
-	private void readInMedia(String mediaFilepath){
-		VideoCapture capture = new VideoCapture(this.currentMediaPath);
-		if (capture.isOpened()){
-			Mat frame = new Mat();
-			while (capture.read(frame)){
-				this.video.addMat(frame);
-				frame = new Mat();
-			}
-		}
-		capture.release();
 	}
 
 	@FXML
@@ -205,7 +171,7 @@ public class Controller {
 					changeSliderValue(i);
 					if (isCancelled()){break;}
 					displayImage(video.get(i + 1));
-					if (i % 2 == 1){playClick();}
+//					if (i % 2 == 1){playClick();}
 					Thread.sleep(33);
 				}
 				displayImage(video.get(startFrame));
@@ -217,6 +183,72 @@ public class Controller {
 
 	@FXML
 	protected void stopVideo(ActionEvent event){task.cancel();}
+
+	@FXML
+	protected void playFrame(ActionEvent event) throws LineUnavailableException {
+		playImage(video.get(startFrame));
+	}
+	
+	private String getMediaFilename() {
+		// This method should return the filename of the image to be played
+		// You should insert your code here to allow user to select the file
+		Stage stage = new Stage();
+		stage.setTitle("File Chooser");
+
+		final FileChooser fileChooser = new FileChooser();
+		configureFileChooser(fileChooser);
+		File file = fileChooser.showOpenDialog(stage);
+
+		if (file != null) {
+			this.currentMediaPath = file.getPath();
+		}
+		return this.currentMediaPath;
+	}
+
+	private void changeSliderValue(int frame){frameSlider.setValue(frame);}
+
+	private void configureFileChooser(final FileChooser fileChooser){
+		fileChooser.setTitle("Choose Image");
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+		fileChooser.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter("Media File", "*.*"),
+				new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+				new FileChooser.ExtensionFilter("PNG", "*.png"),
+				new FileChooser.ExtensionFilter("MP4", "*.mp4"));
+	}
+
+	private void updateSlider(){
+		if (video.getLength() <= 1){
+			frameSlider.setDisable(true);
+		}
+		else {
+			frameSlider.setDisable(false);
+			frameSlider.setMin(0);
+			frameSlider.setMax(video.getLength());
+			frameSlider.setSnapToTicks(true);
+			frameSlider.setBlockIncrement(1);
+			frameSlider.setShowTickMarks(true);
+			frameSlider.setShowTickLabels(true);
+		}
+	}
+
+	private void readInMedia(String mediaFilepath){
+		if (mediaFilepath.contains(".mp4") || mediaFilepath.contains(".gif")) {
+			VideoCapture capture = new VideoCapture(this.currentMediaPath);
+			if (capture.isOpened()) {
+				Mat frame = new Mat();
+				while (capture.read(frame)) {
+					this.video.addMat(frame);
+					frame = new Mat();
+				}
+			}
+			capture.release();
+		} else {
+			Mat image = imread(mediaFilepath, CV_LOAD_IMAGE_COLOR);
+			video.addMat(image);
+		}
+	}
 
 	private void displayImage(Mat image){
 		imageView.setImage(Utilities.mat2Image(image));
@@ -268,7 +300,8 @@ public class Controller {
 	}
 
 	private void playClick(){
-		// TODO Implement This Using the Click.mp3 file in src/application
+		MediaPlayer clickPlayer = new MediaPlayer(new Media(new File(CLICK_PATH).toURI().toString()));
+		clickPlayer.play();
 	}
 
 	private void hideFPSLabel(){fpsLabel.setText("");}

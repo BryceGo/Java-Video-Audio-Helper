@@ -9,46 +9,68 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
    <bottom>
-      <VBox prefHeight="111.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="111.0" prefWidth="601.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <HBox alignment="CENTER" prefHeight="24.0" prefWidth="801.0">
                <children>
-                  <Slider fx:id="frameSlider" blockIncrement="1.0" minWidth="500.0" prefWidth="500.0" />
+                  <Slider fx:id="frameSlider" blockIncrement="1.0" minWidth="500.0" prefHeight="14.0" prefWidth="740.0" />
                </children>
             </HBox>
-            <HBox prefHeight="68.0" prefWidth="600.0">
+            <HBox alignment="CENTER" prefHeight="68.0" prefWidth="600.0">
                <children>
-                  <Button minWidth="100.0" mnemonicParsing="false" onAction="#openMedia" prefHeight="40.0" prefWidth="124.0" text="Open File" translateX="-100.0">
-                     <HBox.margin>
-                        <Insets left="150.0" top="20.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Button minHeight="40.0" minWidth="118.0" mnemonicParsing="false" onAction="#playVideoWithSound" prefHeight="40.0" prefWidth="118.0" text="Play With Sound" translateX="-120.0">
-                     <HBox.margin>
-                        <Insets left="100.0" top="20.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Button minHeight="40.0" minWidth="130.0" mnemonicParsing="false" onAction="#playVideoWithoutSound" prefHeight="40.0" prefWidth="130.0" text="Play Without Sound" translateX="-110.0">
-                     <HBox.margin>
-                        <Insets top="20.0" />
-                     </HBox.margin>
-                  </Button>
-                  <Button minWidth="75.0" mnemonicParsing="false" onAction="#stopVideo" prefHeight="40.0" prefWidth="118.0" text="Stop" translateX="-100.0">
-                     <HBox.margin>
-                        <Insets top="20.0" />
-                     </HBox.margin>
-                  </Button>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#openMedia" text="Open File">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                     <children>
+                        <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                           <children>
+                              <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                                 <children>
+                                    <Button fx:id="playWithSoundButton" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#playVideoWithSound" text="Play Video w/ Sound">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="playWithoutSoundButton" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#playVideoWithoutSound" text="Play Video w/o Sound">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <Button fx:id="playFrameButton" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#playFrame" text="Play Frame">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <opaqueInsets>
+                              <Insets right="200.0" />
+                           </opaqueInsets>
+                        </VBox>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <Button fx:id="stopButton" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="100.0" mnemonicParsing="false" onAction="#stopVideo" prefHeight="60.0" prefWidth="80.0" text="Stop">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
                </children>
             </HBox>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CMPT 365 | Simon Fraser University | May 2017&#10;Mark Drew (mark@cs.sfu.ca) | Chen Song (csa102@sfu.ca)" textAlignment="CENTER" wrappingWidth="456.638671875">
-               <VBox.margin>
-                  <Insets left="50.0" />
-               </VBox.margin>
-            </Text>
          </children>
       </VBox>
    </bottom>
@@ -56,7 +78,7 @@
       <ImageView fx:id="imageView" fitHeight="263.0" fitWidth="421.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
    </center>
    <top>
-      <Label fx:id="fpsLabel" alignment="CENTER" BorderPane.alignment="CENTER">
+      <Label fx:id="fpsLabel" alignment="CENTER" text="All Videos Assumed To Be 30 FPS" BorderPane.alignment="CENTER">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
