@@ -1,0 +1,18 @@
+For the slider:
+
+    We decided that for the purpose of viewing frames with sound in videos that it would be advantageous to be able to
+start and stop a video anywhere that the user chooses. For this we added a slider option that uses a value change
+listener to update which frame in the video we play or start from. This slider is disabled whenever the media being
+displayed is either a single frame video or a still image.
+
+For the video support:
+
+    In order to support video media in the application we used the JavaFX VideoCapture class to load in a video as a
+dynamic Mat array. This would allow similar options to be performed on video media and still images. This also worked
+well with the slider implementation as it is easy to change a "current position" in an array.
+
+For the open file support:
+
+    For the open file support we used the JavaFX FileChooser class and set restrictions on file types selected. The
+purpose for this decision rather than implementing our own fie selector is that this allows for selection of media
+anywhere in the user's file system.
