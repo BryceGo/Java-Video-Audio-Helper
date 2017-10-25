@@ -108,7 +108,6 @@ public class Controller {
 			displayImage(video.get(startFrame));
 		});
 		updateSlider();
-		hideFPSLabel();
 	}
 
 
@@ -124,12 +123,10 @@ public class Controller {
 			readInMedia(this.currentMediaPath);
 			if (video.getLength() > 0){
 				if (video.getLength() == 1) {
-					hideFPSLabel();
 					playWithoutSoundButton.setDisable(true);
 					playWithSoundButton.setDisable(true);
 					stopButton.setDisable(true);
 				} else {
-					showFPSLabel();
 					playWithoutSoundButton.setDisable(false);
 					playWithSoundButton.setDisable(false);
 					stopButton.setDisable(false);
@@ -353,9 +350,4 @@ public class Controller {
 		System.out.println("Hovered: Play Video without sound");
 	}
 	
-	
-	
-	private void hideFPSLabel(){fpsLabel.setText("");}
-
-	private void showFPSLabel(){fpsLabel.setText("All Videos Assumed To Be 30 FPS");}
 }
