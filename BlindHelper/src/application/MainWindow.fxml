@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -10,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
    <bottom>
       <VBox prefHeight="111.0" prefWidth="601.0" BorderPane.alignment="CENTER">
          <children>
@@ -23,7 +29,7 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#openMedia" text="Open File">
+                        <Button mnemonicParsing="false" onAction="#openMedia" onMouseEntered="#hoverOpenFile" text="Open File">
                            <font>
                               <Font name="System Bold" size="24.0" />
                            </font>
@@ -36,19 +42,19 @@
                            <children>
                               <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                                  <children>
-                                    <Button fx:id="playWithSoundButton" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#playVideoWithSound" text="Play Video w/ Sound">
+                                    <Button fx:id="playWithSoundButton" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#playVideoWithSound" onMouseEntered="#hoverPlayVideo" text="Play Video w/ Sound">
                                        <font>
                                           <Font name="System Bold" size="14.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="playWithoutSoundButton" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#playVideoWithoutSound" text="Play Video w/o Sound">
+                                    <Button fx:id="playWithoutSoundButton" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#playVideoWithoutSound" onMouseDragEntered="#hoverPlayVideo_nosound" onMouseDragOver="#hoverPlayVideo_nosound" text="Play Video w/o Sound">
                                        <font>
                                           <Font name="System Bold" size="14.0" />
                                        </font>
                                     </Button>
                                  </children>
                               </HBox>
-                              <Button fx:id="playFrameButton" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#playFrame" text="Play Frame">
+                              <Button fx:id="playFrameButton" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#playFrame" onMouseEntered="#hoverPlayFrame" text="Play Frame">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font>
@@ -60,7 +66,7 @@
                         </VBox>
                         <VBox alignment="CENTER">
                            <children>
-                              <Button fx:id="stopButton" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="100.0" mnemonicParsing="false" onAction="#stopVideo" prefHeight="60.0" prefWidth="80.0" text="Stop">
+                              <Button fx:id="stopButton" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="100.0" mnemonicParsing="false" onAction="#stopVideo" onMouseEntered="#hoverStop" prefHeight="60.0" prefWidth="80.0" text="Stop">
                                  <font>
                                     <Font name="System Bold" size="24.0" />
                                  </font>

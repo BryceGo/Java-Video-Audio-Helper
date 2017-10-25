@@ -5,10 +5,6 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
-
-
-import javafx.event.Event;
-
 import javafx.concurrent.Task;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -48,13 +44,7 @@ public class Controller {
 	private Button playWithoutSoundButton, playWithSoundButton, stopButton;
 
 	private static final String CLICK_PATH = "BlindHelper/src/application/Click.mp3";
-	private static final String STOP_HOVER_PATH = "BlindHelper/src/application/STOP.mp3";
-	private static final String OPENFILE_PATH = "BlindHelper/src/application/OPEN_FILE.mp3";
-	private static final String PLAY_FRAME_PATH = "BlindHelper/src/application/PLAY_FRAME.mp3";
-	private static final String PLAY_VIDEO_PATH = "BlindHelper/src/application/PLAY_VIDEO_W_SOUND.mp3";
-	private static final String PLAY_VIDEO_WO_SOUND_PATH = "BlindHelper/src/application/PLAY_VIDEO_WO_SOUND.mp3";
-	
-	
+
 	private DynamicMatArray video;
 	private Task task = new Task() {
 		@Override
@@ -64,7 +54,6 @@ public class Controller {
 	};
 	private MediaPlayer clickPlayer = new MediaPlayer(new Media(new File(CLICK_PATH).toURI().toString()));
 	
-
 	private int width;
 	private int height;
 	private int sampleRate; // sampling frequency
@@ -86,6 +75,7 @@ public class Controller {
 		sampleRate = 8000;
 		sampleSizeInBits = 8;
 		numberOfChannels = 1;
+
 		numberOfQuantizionLevels = 16;
 		
 		numberOfSamplesPerColumn = 500;
@@ -111,9 +101,6 @@ public class Controller {
 		hideFPSLabel();
 	}
 
-
-	
-	
 	@FXML
 	protected void openMedia(ActionEvent event) throws InterruptedException {
 		// This method opens an image and display it using the GUI
@@ -316,45 +303,7 @@ public class Controller {
 		MediaPlayer clickPlayer = new MediaPlayer(new Media(new File(CLICK_PATH).toURI().toString()));
 		clickPlayer.play();
 	}
-	
-	@FXML
-	protected void hoverStop(Event event) {
-		MediaPlayer sound = new MediaPlayer(new Media(new File(STOP_HOVER_PATH).toURI().toString()));
-		sound.play();
-		System.out.println("Hovered: Stop");
-	}
-	
-	
-	@FXML
-	protected void hoverOpenFile(Event event) {
-		MediaPlayer sound = new MediaPlayer(new Media(new File(OPENFILE_PATH).toURI().toString()));
-		sound.play();
-		System.out.println("Hovered: Open File");
-	}
-	
-	@FXML
-	protected void hoverPlayFrame(Event event) {
-		MediaPlayer sound = new MediaPlayer(new Media(new File(PLAY_FRAME_PATH).toURI().toString()));
-		sound.play();
-		System.out.println("Hovered: Play Frame");
-	}
-	
-	@FXML
-	protected void hoverPlayVideo(Event event) {
-		MediaPlayer sound = new MediaPlayer(new Media(new File(PLAY_VIDEO_PATH).toURI().toString()));
-		sound.play();
-		System.out.println("Hovered: Play Video");
-	}
-	
-	@FXML
-	protected void hoverPlayVideo_nosound(Event event) {
-		MediaPlayer sound = new MediaPlayer(new Media(new File(PLAY_VIDEO_WO_SOUND_PATH).toURI().toString()));
-		sound.play();
-		System.out.println("Hovered: Play Video without sound");
-	}
-	
-	
-	
+
 	private void hideFPSLabel(){fpsLabel.setText("");}
 
 	private void showFPSLabel(){fpsLabel.setText("All Videos Assumed To Be 30 FPS");}
