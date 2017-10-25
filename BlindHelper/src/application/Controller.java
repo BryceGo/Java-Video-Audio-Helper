@@ -53,6 +53,8 @@ public class Controller {
 	private static final String PLAY_FRAME_PATH = "BlindHelper/src/application/PLAY_FRAME.mp3";
 	private static final String PLAY_VIDEO_PATH = "BlindHelper/src/application/PLAY_VIDEO_W_SOUND.mp3";
 	private static final String PLAY_VIDEO_WO_SOUND_PATH = "BlindHelper/src/application/PLAY_VIDEO_WO_SOUND.mp3";
+	private static final String TITLE_PATH = "BlindHelper/src/application/TITLE.mp3";
+	private static final String VIDEO_LOAD_PATH = "BlindHelper/src/application/video_loaded.mp3";
 	
 	
 	private DynamicMatArray video;
@@ -244,6 +246,7 @@ public class Controller {
 	}
 
 	private void readInMedia(String mediaFilepath){
+		MediaPlayer sound;
 		if (mediaFilepath.contains(".mp4") || mediaFilepath.contains(".gif")) {
 			VideoCapture capture = new VideoCapture(this.currentMediaPath);
 			if (capture.isOpened()) {
@@ -258,6 +261,9 @@ public class Controller {
 			Mat image = imread(mediaFilepath, CV_LOAD_IMAGE_COLOR);
 			video.addMat(image);
 		}
+		
+		sound = new MediaPlayer(new Media(new File(VIDEO_LOAD_PATH).toURI().toString()));
+		sound.play();
 	}
 
 	private void displayImage(Mat image){
@@ -348,6 +354,13 @@ public class Controller {
 		MediaPlayer sound = new MediaPlayer(new Media(new File(PLAY_VIDEO_WO_SOUND_PATH).toURI().toString()));
 		sound.play();
 		System.out.println("Hovered: Play Video without sound");
+	}
+	
+	@FXML
+	protected void hoverTitle(Event event) {
+		MediaPlayer sound = new MediaPlayer(new Media(new File(TITLE_PATH).toURI().toString()));
+		sound.play();
+		System.out.println("Hovered: Title");
 	}
 	
 }

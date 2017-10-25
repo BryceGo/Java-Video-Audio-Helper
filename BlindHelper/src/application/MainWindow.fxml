@@ -84,7 +84,7 @@
       <ImageView fx:id="imageView" fitHeight="263.0" fitWidth="421.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
    </center>
    <top>
-      <Label fx:id="fpsLabel" alignment="CENTER" text="All Videos Assumed To Be 30 FPS" BorderPane.alignment="CENTER">
+      <Label fx:id="fpsLabel" alignment="CENTER" onMouseEntered="#hoverTitle" text="All Videos Assumed To Be 30 FPS" BorderPane.alignment="CENTER">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
