@@ -347,7 +347,7 @@ public class Controller {
 	}
 	
 	@FXML
-	protected void hoverPlayVideo_nosound(Event event) {
+	protected void hoverPlayVideoWithoutSound(Event event) {
 		MediaPlayer sound = new MediaPlayer(new Media(new File(PLAY_VIDEO_WO_SOUND_PATH).toURI().toString()));
 		sound.play();
 		System.out.println("Hovered: Play Video without sound");
